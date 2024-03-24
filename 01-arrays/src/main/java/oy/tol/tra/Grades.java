@@ -4,8 +4,9 @@ package oy.tol.tra;
  * A simple array of student grades to be used in testing
  * misbehaving algorithm for reversing the array.
  */
+
 public class Grades {
-   
+
    private Integer [] grades = null;
 
    /**
@@ -32,12 +33,12 @@ public class Grades {
        6. Transform the algorithm to <strong>use</strong> the generic one from Algorithms.java, as instructed in the readme file.
       */
       int i = 0;
-      while (i <= grades.length/2) {
+      while (i < grades.length / 2) {
          int temp = grades[i];
-         grades[i] = grades[grades.length-i-1];
-         grades[grades.length-i-1] = temp;
+         grades[i] = grades[grades.length - i - 1];
+         grades[grades.length - i - 1] = temp;
          i++;
-     }
+      }
    }
 
    /**
@@ -52,14 +53,15 @@ public class Grades {
        5. Fix the issue.
        6. Transform the algorithm to <strong>use</strong> the generic one from Algorithms.java as instructed in the readme file.
       */
-      int i = grades.length-1;
-      while (i > 0) {
-         if (grades[i] < grades[i-1]) {
-            int tmp = grades[i];
-            grades[i] = grades[i-1];
-            grades[i-1] = tmp;
+      int n = grades.length;
+      for (int i = 0; i < n - 1; i++) {
+         for (int j = 0; j < n - i - 1; j++) {
+            if (grades[j] > grades[j + 1]) {
+               int temp = grades[j];
+               grades[j] = grades[j + 1];
+               grades[j + 1] = temp;
+            }
          }
-         i--;
       }
    }
 
