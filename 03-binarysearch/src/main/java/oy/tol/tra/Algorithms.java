@@ -1,50 +1,13 @@
 package oy.tol.tra;
 
 public class Algorithms {
-    private Algorithms() {
-        // Empty
-    }
-
-    public static int binarySearch(int value, Integer[] array, int fromIndex, int toIndex) {
-
-        while (fromIndex <= toIndex) {
-            int mid = (toIndex + fromIndex) / 2;
-            if(array[mid] == value){
-                return mid;
-            }else if(array[mid] < value){
-                fromIndex = mid + 1;
-            }else{
-                toIndex = mid - 1;
-            }
-
-        }
-
-        return -1;
-    }
-
-    public static int binarySearch(String value, String[] array, int fromIndex, int toIndex) {
-
-        while (fromIndex <= toIndex) {
-            int mid = (toIndex + fromIndex) / 2;
-            int cmp = value.compareTo(array[mid]);
-
-            if (cmp == 0) {
-                return mid;
-            } else if (cmp < 0) {
-                toIndex = mid + 1;
-            } else {
-                fromIndex = mid - 1;
-            }
-        }
-
-        return -1;
-    }
-    public static void sort(Integer[] array) {
+    public static <T extends Comparable<T>> void sort(T [] array) {
+        // implementation here...
         int n = array.length;
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
-                if (array[j] > array[j + 1]) {
-                    int temp = array[j];
+                if (array[j].compareTo(array[j + 1]) > 0) {
+                    T temp = array[j];
                     array[j] = array[j + 1];
                     array[j + 1] = temp;
                 }
@@ -53,35 +16,55 @@ public class Algorithms {
     }
 
 
-    public static void sort(String[] array) {
-        fastSort(array, 0, array.length - 1);
-    }
-
-    public static void fastSort(String[] array, int start, int end){
-        if(start < end){
-            int pivotIndex = partition(array, start, end);
-            fastSort(array, start, pivotIndex - 1);
-            fastSort(array, pivotIndex + 1, end);
+    public static <T extends Comparable<T>> int binarySearch(T aValue, T[] fromArray, int fromIndex, int toIndex) {
+        if (fromArray == null || fromIndex < 0 || toIndex > fromArray.length || fromIndex >= toIndex) {
+            throw new IllegalArgumentException("Invalid array or range");
         }
+        while (fromIndex < toIndex) {
+            int midIndex = fromIndex + (toIndex - fromIndex) / 2;
+            T midValue = fromArray[midIndex];
 
-    }
-    private static int partition(String[] array, int start, int end){
-        String pivot = array[end];
-        int i = start - 1;
-        for(int j = start; j < end; j++){
-            if(array[j].compareTo(pivot) < 0){
-                i++;
-                String tmp = array[i];
-                array[i] = array[j];
-                array[j] = tmp;
+            int comparison = aValue.compareTo(midValue);
+            if (comparison == 0) {
+                return midIndex;
+            } else if (comparison < 0) {
+                toIndex = midIndex;
+            } else {
+                fromIndex = midIndex + 1;
             }
         }
-        String tmp = array[i + 1];
-        array[i + 1] = array[end];
-        array[end] = tmp;
-        return i + 1;
+        if (fromIndex == toIndex && fromArray[fromIndex].equals(aValue)) {
+            return fromIndex;
+        }
+        return -1;
     }
 
+    public static <T extends Comparable<T>> void quickSort(T[] array) {
+        quickSort(array, 0, array.length - 1);
+    }
 
+    private static <T extends Comparable<T>> void quickSort(T[] array, int low, int high) {
+        if (low < high) {
+            int pi = partition(array, low, high);
+            quickSort(array, low, pi - 1);
+            quickSort(array, pi + 1, high);
+        }
+    }
 
+    private static <T extends Comparable<T>> int partition(T[] array, int low, int high) {
+        T pivot = array[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (array[j].compareTo(pivot) < 0) {
+                i++;
+                T temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+        T temp = array[i + 1];
+        array[i + 1] = array[high];
+        array[high] = temp;
+        return i + 1;
+    }
 }

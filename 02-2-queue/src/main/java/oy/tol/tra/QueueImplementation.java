@@ -7,6 +7,8 @@ public class QueueImplementation<E> implements QueueInterface<E> {
     private Object[] array;
     private int size = 0;
     private int capacity;
+    private int head = 0;
+    private int tail = -1;
 
     public QueueImplementation(int capacity) throws QueueAllocationException{
         if(capacity < 1){
@@ -40,6 +42,8 @@ public class QueueImplementation<E> implements QueueInterface<E> {
             array[i] = null;
         }
         size = 0;
+        head = 0;
+        tail = -1;
     }
 
 
@@ -54,10 +58,12 @@ public class QueueImplementation<E> implements QueueInterface<E> {
             try{
                 newArray = new Object[newCapacity];
                 for(int i = 0; i < size; i++){
-                    newArray[i] = array[i];
+                    newArray[i] = array[(head + 1) % capacity];
                 }
                 array = newArray;
                 capacity = newCapacity;
+                head = 0;
+                tail = size - 1;
             }catch(Exception e){
                 throw new QueueAllocationException("Cannot allocate room");
             }
@@ -71,11 +77,10 @@ public class QueueImplementation<E> implements QueueInterface<E> {
         if (isEmpty()) {
             throw new QueueIsEmptyException("Queue is empty");
         }
-        E element = (E) array[0];
-        for (int i = 0; i < size - 1; i++) {
-            array[i] = array[i + 1];
-        }
-        array[--size] = null;
+        E element = (E) array[head];
+        array[head] = null;
+        head = (head + 1) % capacity;
+        size--;
         return element;
 
     }
